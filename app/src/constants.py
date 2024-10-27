@@ -1,1 +1,0 @@
-STATIC_DIR = 'app/static'

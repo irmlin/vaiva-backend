@@ -10,5 +10,6 @@
 3. Install packages - `pip install -r requirements.txt`
 
 
-### Run the application
-1. `python app/main.py`
+### Run the microservices
+1. `python main-app/main.py` - API
+2. `python video-avatar-microservice/main.py` - microservice for generating avatar videos

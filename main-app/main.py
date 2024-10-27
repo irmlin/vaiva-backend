@@ -19,13 +19,6 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 root_router = APIRouter(prefix="/api")
-
-
-@root_router.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
 root_router.include_router(video_router)
 app.include_router(root_router)
 
