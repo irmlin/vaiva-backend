@@ -6,4 +6,9 @@
 2. Create a virtual environment (venv):
    * `python3.11 -m venv venv`
    * Activate the environment - `venv\Scripts\activate` (windows); `source venv/bin/activate` (ubuntu)
+   * In Pycharm IDE (if used), also activate the environment in the IDE: `file` -> `settings` -> `Project: vaiva-backend` -> `Add Interpreter` -> `Add Local Interpreter` -> `Existing` -> select path to created `venv` -> `ok` -> `apply` -> `ok`
 3. Install packages - `pip install -r requirements.txt`
+
+
+### Run the application
+1. `python app/main.py`
