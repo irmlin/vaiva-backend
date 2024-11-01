@@ -16,7 +16,7 @@ async def generate_video(text: str = Form(), image: UploadFile = File(...)):
             "image": (image.filename, await image.read(), image.content_type),
         }
         try:
-            response = await client.post(AVATAR_SERVICE_URL, files=form_data, timeout=httpx.Timeout(80))
+            response = await client.post(AVATAR_SERVICE_URL, files=form_data, timeout=httpx.Timeout(120))
             response.raise_for_status()
 
             headers = {'Content-Disposition': 'attachment; filename="generated_video.mp4"'}
