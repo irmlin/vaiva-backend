@@ -1,1 +1,1 @@
-STATIC_DIR = 'video-avatar-microservice/static'
+STATIC_DIR = 'static/'

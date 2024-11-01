@@ -4,21 +4,18 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from src.services.video_service import VideoService
 
 from src.constants import STATIC_DIR
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+video_service = VideoService()
 
 
-@app.post("/infer")
-async def infer(text: str = Form(), image: UploadFile = File(...)):
-    video = 'sample.mp4'
-    file_path = os.path.join(STATIC_DIR, video)
-    if not os.path.isfile(file_path):
-        raise HTTPException(status_code=404, detail="File not found")
-
-    return FileResponse(path=file_path, filename=video, media_type="video/mp4")
+@app.post("/generate-video")
+async def generate_video(text: str = Form(), image: UploadFile = File(...)):
+    return await video_service.generate_video(text, image)
 
 
 if __name__ == "__main__":
