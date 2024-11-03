@@ -1,7 +1,8 @@
 # vaiva-backend
 
+Sadtalker: https://github.com/OpenTalker/SadTalker
 
-### Setup
+### Setup (for local development)
 1. Install python3.8 - [windows](https://www.python.org/downloads/release/python-3110/) link, [ubuntu](https://www.makeuseof.com/install-python-ubuntu/)  link
 2. Open `video-avatar-microservice` as a project in pycharm
 3. Create a virtual environment (venv):
@@ -16,7 +17,15 @@
    * Windows
      * Download from [here](https://github.com/OpenTalker/SadTalker?tab=readme-ov-file#pre-trained-models).
    * After downloading, you should have models in `src/external/sadtalker/checkpoints` and `src/external/sadtalker/gfpgan` folders
+6. Run with `python main.py`
 
-
-### Run the microservice
-1. `python main.py`
+### Docker setup
+1. Download models:
+   * Ubuntu
+      * `cd src/external/sadtalker`
+      * `bash scripts/download_models.sh`
+   * Windows
+     * Download from [here](https://github.com/OpenTalker/SadTalker?tab=readme-ov-file#pre-trained-models).
+   * After downloading, you should have models in `src/external/sadtalker/checkpoints` and `src/external/sadtalker/gfpgan` folders
+2. Build docker image: `docker build -t video-avatar-microservice .`
+3. Use `docker-compose.yml` file in project's root directory to run the container.

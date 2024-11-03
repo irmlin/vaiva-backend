@@ -8,8 +8,8 @@ RUN apt update -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /home/video-avatar-microservice
-WORKDIR /home/video-avatar-microservice
+RUN mkdir /app
+WORKDIR /app
 COPY requirements.txt ./
 RUN pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu113
 

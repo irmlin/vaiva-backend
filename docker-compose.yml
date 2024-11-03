@@ -1,0 +1,38 @@
+services:
+
+  main-api:
+    image: main-api
+    container_name: main-api
+    volumes:
+      - ./main-api/static:/app/static
+    ports:
+      - 8001:8001
+    command: python main.py
+    networks:
+      - app-network
+
+  video-avatar-microservice:
+    image: video-avatar-microservice
+    container_name: video-avatar-microservice
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./video-avatar-microservice/src/external/sadtalker/checkpoints:/app/src/external/sadtalker/checkpoints
+      - ./video-avatar-microservice/src/external/sadtalker/gfpgan/weights:/app/src/external/sadtalker/gfpgan/weights
+      - ./video-avatar-microservice/src/external/sadtalker/results:/home/app/src/external/sadtalker/results
+      - ./video-avatar-microservice/static:/app/static
+    ports:
+      - 8002:8002
+    command: python main.py
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
