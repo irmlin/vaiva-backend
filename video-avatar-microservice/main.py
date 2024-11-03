@@ -14,8 +14,8 @@ video_service = VideoService()
 
 
 @app.post("/generate-video")
-async def generate_video(text: str = Form(), image: UploadFile = File(...)):
-    return await video_service.generate_video(text, image)
+async def generate_video(audio: UploadFile = File(...), image: UploadFile = File(...)):
+    return await video_service.generate_video(audio, image)
 
 
 if __name__ == "__main__":
