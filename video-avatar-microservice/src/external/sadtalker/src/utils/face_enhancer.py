@@ -1,7 +1,7 @@
 import os
 import torch 
 
-from gfpgan import GFPGANer
+from src.external.sadtalker.src.utils.GFPGANer_ import GFPGANer_
 
 from tqdm import tqdm
 
@@ -45,6 +45,7 @@ def enhancer_generator_no_len(images, method='gfpgan', bg_upsampler='realesrgan'
     the enhancer function. """
 
     print('face enhancer....')
+
     if not isinstance(images, list) and os.path.isfile(images): # handle video to images
         images = load_video_to_cv2(images)
 
@@ -91,16 +92,16 @@ def enhancer_generator_no_len(images, method='gfpgan', bg_upsampler='realesrgan'
         bg_upsampler = None
 
     # determine model paths
-    model_path = os.path.join('src/external/sadtalker/gfpgan/weights', model_name + '.pth')
-    
+    model_path = os.path.join('src', 'external', 'sadtalker', 'gfpgan', 'weights', model_name + '.pth')
+
     if not os.path.isfile(model_path):
-        model_path = os.path.join('src/external/sadtalker/checkpoints', model_name + '.pth')
+        model_path = os.path.join('src', 'external', 'sadtalker', 'checkpoints', model_name + '.pth')
     
     if not os.path.isfile(model_path):
         # download pre-trained models from url
         model_path = url
 
-    restorer = GFPGANer(
+    restorer = GFPGANer_(
         model_path=model_path,
         upscale=2,
         arch=arch,

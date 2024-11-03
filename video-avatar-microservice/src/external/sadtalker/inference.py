@@ -4,6 +4,7 @@ import shutil
 import torch
 
 from src.external.sadtalker.src.facerender.animate import AnimateFromCoeff
+# from src.external.sadtalker.src.facerender.animate_onnx import AnimateFromCoeff
 from src.external.sadtalker.src.generate_batch import get_data
 from src.external.sadtalker.src.generate_facerender_batch import get_facerender_data
 from src.external.sadtalker.src.test_audio2coeff import Audio2Coeff
@@ -99,7 +100,8 @@ class Inference:
         result = self.animate_from_coeff.generate(data, save_dir, pic_path, crop_info,
                                                   enhancer=self.enhancer, background_enhancer=self.background_enhancer,
                                                   preprocess=self.preprocess, img_size=self.size)
-
+        # result = self.animate_from_coeff.generate_deploy(data, save_dir, pic_path, crop_info,
+        #                                                 enhancer="gfpgan", background_enhancer=None, preprocess=self.preprocess)
         out_path = os.path.join(os.path.dirname(save_dir), f'{output_video_name}')
         shutil.move(result, out_path)
         print('The generated video:', out_path)
