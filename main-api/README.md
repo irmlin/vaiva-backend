@@ -3,7 +3,7 @@
 
 ### Setup (for local development)
 1. Install python3.11 - [windows](https://www.python.org/downloads/release/python-3110/) link, [ubuntu](https://www.makeuseof.com/install-python-ubuntu/)  link
-2. Open `main-app` as a project in pycharm
+2. Open `main-api` as a project in pycharm
 3. Create a virtual environment (venv):
    * `python3.11 -m venv venv-api`
    * Activate the environment - `venv-api\Scripts\activate` (windows); `source venv-api/bin/activate` (ubuntu)
