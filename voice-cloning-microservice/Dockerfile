@@ -33,7 +33,6 @@ WORKDIR /app
 
 COPY requirements.txt ./
 
-RUN pip install git+https://github.com/myshell-ai/MeloTTS.git
 RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu113
 RUN python -m unidic download
 
@@ -41,4 +40,4 @@ COPY main.py ./
 COPY src/ src/
 
 EXPOSE 8002
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002", "--log-level", "info", "--reload", "false"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002", "--log-level", "info"]
