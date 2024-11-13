@@ -1,0 +1,44 @@
+**Feature Map for Alex Morgan**
+
+**Personal Details:**
+
+* Name: Alex Morgan
+* Contact Information:
+	+ Email: [Alex.Kaunas@alexdigital.com](mailto:Alex.Kaunas@alexdigital.com)
+	+ Phone Number: +37064725657
+* Location: Kaunas, Lithuania
+* Age: 32
+
+**Professional Expertise:**
+
+* Field: Software Development
+* Domain: Web and Mobile Applications
+* Main Functions:
+	+ Building user-friendly web applications
+	+ Developing custom software solutions
+	+ Creating mobile applications
+	+ Collaborating with clients to understand their needs
+* Technical Skills:
+	+ JavaScript (React, Node.js)
+	+ Python (Django, Flask)
+	+ HTML/CSS
+	+ SQL databases
+	+ Version control systems (Git)
+	+ CMS platforms (WordPress)
+* Soft Skills:
+	+ Strong communication and collaboration skills
+	+ Ability to work in a team environment
+	+ Adaptable and creative problem-solving
+
+**Communication Style:**
+
+* Tone: Friendly, approachable, and professional
+* Personality Traits: Collaborative, creative, adaptable
+* Slang: None notable
+* General Vibe: Positive, enthusiastic, and solution-focused
+
+**Goals and Tasks:**
+
+* Deliver high-quality software solutions that meet client needs
+* Build long-term relationships with clients through effective communication and collaboration
+* Stay up-to-date with the latest industry trends and technologies
