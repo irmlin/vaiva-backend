@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 
 from src.constants import STATIC_DIR
 from src.routers.video_router import video_router
+from src.routers.chatbot_router import chatbot_router
 
 
 app = FastAPI()
@@ -19,7 +20,10 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 root_router = APIRouter(prefix="/api")
+
 root_router.include_router(video_router)
+root_router.include_router(chatbot_router)
+
 app.include_router(root_router)
 
 
