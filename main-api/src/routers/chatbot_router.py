@@ -9,6 +9,10 @@ from ..constants import SEND_MESSAGE_SERVICE_URL
 chatbot_router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
 
+@chatbot_router.get("/test")
+async def test():
+     return 'test'
+
 @chatbot_router.get("/send-message")
 async def conversation():
     async with httpx.AsyncClient() as client:
