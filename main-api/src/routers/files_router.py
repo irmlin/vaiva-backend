@@ -24,7 +24,7 @@ async def get_all_documents() -> List[str]:
     ]
     return documents
 
-@files_router.get("/download-document")
+@files_router.get("/download-document/{file_name}")
 async def download_document(file_name: str):
     file_path = os.path.join(DOCUMENTS_DIR, file_name)
     if not os.path.exists(file_path) or not os.path.isfile(file_path):
@@ -45,7 +45,7 @@ async def upload_document(document: UploadFile = File(...)):
     return {'detail': 'File uploaded successfully!', 'file_name': document.filename}
 
 
-@files_router.delete("/delete-document")
+@files_router.delete("/delete-document/{file_name}")
 async def delete_document(file_name: str):
     file_path = os.path.join(DOCUMENTS_DIR, file_name)
     return await delete_file(file_path)
@@ -62,7 +62,7 @@ async def get_all_audio_for_avatar() -> List[str]:
     ]
     return audio_files
 
-@files_router.get("/download-audio-for-avatar")
+@files_router.get("/download-audio-for-avatar/{file_name}")
 async def download_audio_for_avatar(file_name: str):
     file_path = os.path.join(AUDIO_FOR_AVATAR_DIR, file_name)
     if not os.path.exists(file_path) or not os.path.isfile(file_path):
@@ -84,7 +84,7 @@ async def upload_audio_for_avatar(audio_file: UploadFile = File(...)):
     await save_input_file_to_storage(file=audio_file, save_dir=AUDIO_FOR_AVATAR_DIR)
     return {'detail': 'File uploaded successfully!', 'file_name': audio_file.filename}
 
-@files_router.delete("/delete-audio-for-avatar")
+@files_router.delete("/delete-audio-for-avatar/{file_name}")
 async def delete_audio_for_avatar(file_name: str):
     file_path = os.path.join(AUDIO_FOR_AVATAR_DIR, file_name)
     return await delete_file(file_path)
@@ -101,7 +101,7 @@ async def get_all_images() -> List[str]:
     ]
     return images
 
-@files_router.get("/download-image")
+@files_router.get("/download-image/{file_name}")
 async def download_image(file_name: str):
     file_path = os.path.join(IMAGES_DIR, file_name)
     if not os.path.exists(file_path) or not os.path.isfile(file_path):
@@ -123,7 +123,7 @@ async def upload_image(image_file: UploadFile = File(...)):
     await save_input_file_to_storage(file=image_file, save_dir=IMAGES_DIR)
     return {'detail': 'File uploaded successfully!', 'file_name': image_file.filename}
 
-@files_router.delete("/delete-image")
+@files_router.delete("/delete-image/{file_name}")
 async def delete_image(file_name: str):
     file_path = os.path.join(IMAGES_DIR, file_name)
     return await delete_file(file_path)
@@ -139,7 +139,7 @@ async def get_all_videos() -> List[str]:
     ]
     return videos
 
-@files_router.get("/download-video")
+@files_router.get("/download-video/{file_name}")
 async def download_video(file_name: str):
     file_path = os.path.join(VIDEO_DIR, file_name)
     if not os.path.exists(file_path) or not os.path.isfile(file_path):
@@ -151,7 +151,7 @@ async def download_video(file_name: str):
         filename=file_name
     )
 
-@files_router.delete("/delete-video")
+@files_router.delete("/delete-video/{file_name}")
 async def delete_video(file_name: str):
     file_path = os.path.join(VIDEO_DIR, file_name)
     return await delete_file(file_path)
@@ -167,7 +167,7 @@ async def get_all_audio_for_voice() -> List[str]:
     ]
     return audio_files
 
-@files_router.get("/download-audio-for-voice")
+@files_router.get("/download-audio-for-voice/{file_name}")
 async def download_audio_for_voice(file_name: str):
     file_path = os.path.join(AUDIO_FOR_VOICE_DIR, file_name)
     if not os.path.exists(file_path) or not os.path.isfile(file_path):
@@ -189,7 +189,7 @@ async def upload_audio_for_voice(audio_file: UploadFile = File(...)):
     await save_input_file_to_storage(file=audio_file, save_dir=AUDIO_FOR_VOICE_DIR)
     return {'detail': 'File uploaded successfully!', 'file_name': audio_file.filename}
 
-@files_router.delete("/delete-audio-for-voice")
+@files_router.delete("/delete-audio-for-voice/{file_name}")
 async def delete_audio_for_voice(file_name: str):
     file_path = os.path.join(AUDIO_FOR_VOICE_DIR, file_name)
     return await delete_file(file_path)
