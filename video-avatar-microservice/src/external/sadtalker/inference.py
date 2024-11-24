@@ -18,7 +18,7 @@ class Inference:
         self.result_dir = os.path.join('src', 'external', 'sadtalker', 'results')
         self.pose_style = 0
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.batch_size = 2
+        self.batch_size = 1
         self.input_yaw_list = None
         self.input_pitch_list = None
         self.input_roll_list = None
@@ -30,7 +30,7 @@ class Inference:
         self.old_version = False
         self.preprocess = 'crop'
         self.still = False
-        self.expression_scale = 1.0
+        self.expression_scale = 0.5
         self.enhancer = 'gfpgan'
         self.background_enhancer = None
         self.verbose = False

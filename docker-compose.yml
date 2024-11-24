@@ -24,7 +24,7 @@ services:
     volumes:
       - ./video-avatar-microservice/src/external/sadtalker/checkpoints:/app/src/external/sadtalker/checkpoints
       - ./video-avatar-microservice/src/external/sadtalker/gfpgan/weights:/app/src/external/sadtalker/gfpgan/weights
-      - ./video-avatar-microservice/src/external/sadtalker/results:/home/app/src/external/sadtalker/results
+      - ./video-avatar-microservice/src/external/sadtalker/results:/app/src/external/sadtalker/results
       - ./video-avatar-microservice/static:/app/static
     ports:
       - 8002:8002
