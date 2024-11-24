@@ -1,6 +1,4 @@
 import os
-import shutil
-import subprocess
 import time
 import uuid
 import aiofiles
@@ -8,7 +6,6 @@ import aiofiles
 from fastapi import HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from src.external.sadtalker.inference import Inference
-from ..constants import STATIC_DIR
 
 
 class VideoService:
