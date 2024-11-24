@@ -7,7 +7,7 @@ from fastapi.responses import Response, FileResponse
 
 from ..constants import DOCUMENTS_DIR, VIDEO_DIR, IMAGES_DIR, ALLOWED_DOCUMENTS_EXTENSIONS, \
     ALLOWED_AUDIO_EXTENSIONS, AUDIO_FOR_AVATAR_DIR, AUDIO_FOR_VOICE_DIR, ALLOWED_IMAGE_EXTENSIONS
-from ..util.util import save_input_file_to_storage, is_directory_empty, delete_file
+from ..util.util import save_input_file_to_storage, is_directory_empty, delete_files_with_extensions, delete_file
 
 files_router = APIRouter(prefix="/files", tags=["files"])
 
@@ -42,7 +42,7 @@ async def upload_document(document: UploadFile = File(...)):
     if ext not in ALLOWED_DOCUMENTS_EXTENSIONS:
         raise HTTPException(status_code=400, detail=f"File type not supported. Must be one of {ALLOWED_DOCUMENTS_EXTENSIONS}")
     await save_input_file_to_storage(file=document, save_dir=DOCUMENTS_DIR)
-    return {'detail': 'File uploaded successfully!'}
+    return {'detail': 'File uploaded successfully!', 'file_name': document.filename}
 
 
 @files_router.delete("/delete-document")
@@ -76,13 +76,13 @@ async def download_audio_for_avatar(file_name: str):
 
 @files_router.post("/upload-audio-for-avatar")
 async def upload_audio_for_avatar(audio_file: UploadFile = File(...)):
-    if not is_directory_empty(dir=AUDIO_FOR_AVATAR_DIR, extensions=ALLOWED_AUDIO_EXTENSIONS):
-        raise HTTPException(status_code=400, detail='Audio file for avatar video already uploaded! Delete it first!')
     name, ext = os.path.splitext(audio_file.filename)
     if ext not in ALLOWED_AUDIO_EXTENSIONS:
         raise HTTPException(status_code=400, detail=f"File type not supported. Must be one of {ALLOWED_AUDIO_EXTENSIONS}")
+    # Only 1 audio file allowed, so remove previously uploaded file
+    delete_files_with_extensions(dir_path=AUDIO_FOR_AVATAR_DIR, extensions=ALLOWED_AUDIO_EXTENSIONS)
     await save_input_file_to_storage(file=audio_file, save_dir=AUDIO_FOR_AVATAR_DIR)
-    return {'detail': 'File uploaded successfully!'}
+    return {'detail': 'File uploaded successfully!', 'file_name': audio_file.filename}
 
 @files_router.delete("/delete-audio-for-avatar")
 async def delete_audio_for_avatar(file_name: str):
@@ -115,13 +115,13 @@ async def download_image(file_name: str):
 
 @files_router.post("/upload-image")
 async def upload_image(image_file: UploadFile = File(...)):
-    if not is_directory_empty(dir=IMAGES_DIR, extensions=ALLOWED_IMAGE_EXTENSIONS):
-        raise HTTPException(status_code=400, detail='Image for avatar video already uploaded! Delete it first!')
     name, ext = os.path.splitext(image_file.filename)
     if ext not in ALLOWED_IMAGE_EXTENSIONS:
         raise HTTPException(status_code=400, detail=f"File type not supported. Must be one of {ALLOWED_IMAGE_EXTENSIONS}")
+    # Only 1 image file allowed, so remove previously uploaded file
+    delete_files_with_extensions(dir_path=IMAGES_DIR, extensions=ALLOWED_IMAGE_EXTENSIONS)
     await save_input_file_to_storage(file=image_file, save_dir=IMAGES_DIR)
-    return {'detail': 'File uploaded successfully!'}
+    return {'detail': 'File uploaded successfully!', 'file_name': image_file.filename}
 
 @files_router.delete("/delete-image")
 async def delete_image(file_name: str):
@@ -181,13 +181,13 @@ async def download_audio_for_voice(file_name: str):
 
 @files_router.post("/upload-audio-for-voice")
 async def upload_audio_for_voice(audio_file: UploadFile = File(...)):
-    if not is_directory_empty(dir=AUDIO_FOR_VOICE_DIR, extensions=ALLOWED_AUDIO_EXTENSIONS):
-        raise HTTPException(status_code=400, detail='Audio file for voice generation already uploaded! Delete it first!')
     name, ext = os.path.splitext(audio_file.filename)
     if ext not in ALLOWED_AUDIO_EXTENSIONS:
         raise HTTPException(status_code=400, detail=f"File type not supported. Must be one of {ALLOWED_AUDIO_EXTENSIONS}")
+    # Only 1 audio file allowed, so remove previously uploaded file
+    delete_files_with_extensions(dir_path=AUDIO_FOR_VOICE_DIR, extensions=ALLOWED_IMAGE_EXTENSIONS)
     await save_input_file_to_storage(file=audio_file, save_dir=AUDIO_FOR_VOICE_DIR)
-    return {'detail': 'File uploaded successfully!'}
+    return {'detail': 'File uploaded successfully!', 'file_name': audio_file.filename}
 
 @files_router.delete("/delete-audio-for-voice")
 async def delete_audio_for_voice(file_name: str):

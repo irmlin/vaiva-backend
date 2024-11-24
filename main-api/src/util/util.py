@@ -35,3 +35,16 @@ async def delete_file(file_path: str):
         return {"detail": f"File {os.path.basename(file_path)} has been deleted."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting file: {str(e)}")
+
+
+def delete_files_with_extensions(dir_path: str, extensions: List[str]):
+    if not os.path.isdir(dir_path):
+        raise NotADirectoryError(f"The path '{dir_path}' is not a directory.")
+
+    for file_name in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, file_name)
+        if os.path.isfile(file_path) and any(file_name.endswith(ext) for ext in extensions):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_name}: {e}")
