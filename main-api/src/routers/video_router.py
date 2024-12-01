@@ -12,7 +12,7 @@ video_router = APIRouter(prefix="/video", tags=["video"])
 async def generate_video(audio: UploadFile = File(...), image: UploadFile = File(...)):
     async with httpx.AsyncClient() as client:
         form_data = {
-            "audio": (audio.filename, await audio.read(), audio.content_type),
+            "audio_for_avatar": (audio.filename, await audio.read(), audio.content_type),
             "image": (image.filename, await image.read(), image.content_type),
         }
         try:
