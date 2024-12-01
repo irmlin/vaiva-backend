@@ -42,7 +42,7 @@ class VoiceService:
                 speaker_id = speaker_ids[speaker_key]
                 speaker_key = speaker_key.lower().replace('_', '-')
                 
-                source_se = torch.load(f'checkpoints_v2/base_speakers/ses/{speaker_key}.pth', map_location=self.device)
+                source_se = torch.load(f'src/checkpoints_v2/base_speakers/ses/{speaker_key}.pth', map_location=self.device)
                 model.tts_to_file(text, speaker_id, src_path, speed=speed)
                 save_path = f'{self.output_dir}/output_v2_{speaker_key}.wav'
 
@@ -60,6 +60,9 @@ class VoiceService:
         file_id = str(uuid.uuid4())
         file_name = f'{file_id}{ext}'
         file_path = os.path.join(save_dir, file_name)
+
+        os.makedirs(save_dir, exist_ok=True)
+        
         async with aiofiles.open(file_path, 'wb') as out_file:
             content = await file.read()
             await out_file.write(content)
