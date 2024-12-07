@@ -1,0 +1,8 @@
+fastapi
+uvicorn==0.32.0
+sounddevice==0.5.1
+numpy==1.24.4
+wave
+pydub==0.25.1
+ffmpeg-python
+python-multipart==0.0.19
