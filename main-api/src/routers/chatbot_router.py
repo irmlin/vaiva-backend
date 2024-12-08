@@ -25,27 +25,32 @@ async def conversation(audio: Optional[UploadFile] = File(None), message: Option
     llm_input = message
     if audio:
         # If audio is provided, transcribe it to text
+        print('Transcribing audio...')
         llm_input = await speech_to_text(audio=audio)
+    print(f'Calling LLM with: {llm_input}')
     llm_response = await get_llm_response(msg=llm_input, username=username)
-    # speech = text_to_speech(text=llm_response)
-    # return
-    return llm_response
+    print(f'LLM response: {llm_response}')
+    speech_response = await text_to_speech(text=llm_response)
+    print(f'Converted LLM response to speech!')
+    headers = {'Content-Disposition': 'attachment; filename="speech.wav"'}
+    return Response(speech_response, headers=headers, media_type='audio/mpeg')
 
 
-async def text_to_speech(text: str) -> str:
+async def text_to_speech(text: str):
     audio_path = './static/audio_for_voice/voice.mp3'
     if not os.path.exists(audio_path):
         raise HTTPException(status_code=400, detail=f'No audio file found for text-to-speech conversion! Excepted: {audio_path}')
     async with aiofiles.open(audio_path, 'rb') as audio_file:
         audio_content = await audio_file.read()
-    audio = UploadFile(filename="voice.mp3", file=audio_content, content_type="audio/mpeg")
     form_data = {
-        "audio": (audio.filename, audio_content, audio.content_type),
         "text": text
+    }
+    files = {
+        "audio": ("voice.mp3", audio_content, "audio/mpeg"),
     }
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(TEXT_TO_SPEECH_SERVICE_URL, form_data, timeout=httpx.Timeout(180))
+            response = await client.post(TEXT_TO_SPEECH_SERVICE_URL, files=files, data=form_data, timeout=httpx.Timeout(180))
             response.raise_for_status()
             return response.content
 
