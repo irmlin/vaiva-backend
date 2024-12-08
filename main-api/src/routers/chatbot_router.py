@@ -1,15 +1,11 @@
 import os
+import uuid
 from typing import Optional
 
-import httpx
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
-from fastapi.responses import Response
-import aiofiles
 
-from ..constants import SEND_MESSAGE_SERVICE_URL, SPEECH_TO_TEXT_SERVICE_URL, TEXT_TO_SPEECH_SERVICE_URL, EXTRACT_FEATURES_SERVICE_URL
-
-# iterpti url visiems endpointams
-
+from ..constants import AUDIO_RESPONSES_DIR
+from ..util.external_services import text_to_speech, get_llm_response, speech_to_text, extract_features_for_persona
 
 chatbot_router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 
@@ -18,32 +14,8 @@ chatbot_router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 async def test():
      return 'test'
 
-# @chatbot_router.post("/conversation")
-# async def conversation(audio: Optional[UploadFile] = File(None), message: Optional[str] = Form(None), username: str = Form(...)):
-#     if not (audio or message):
-#         raise HTTPException(status_code=400, detail='Either audio file or message is required!')
-#     llm_input = message
-#     if audio:
-#         # If audio is provided, transcribe it to text
-#         print('Transcribing audio...')
-#         llm_input = await speech_to_text(audio=audio)
-#     print(f'Calling LLM with: {llm_input}')
-#     llm_response = await get_llm_response(msg=llm_input, username=username)
-#     print(f'LLM response: {llm_response}')
-#     speech_response = await text_to_speech(text=llm_response)
-#     print(f'Converted LLM response to speech!')
-#     headers = {'Content-Disposition': 'attachment; filename="speech.wav"'}
-#     return Response(speech_response, headers=headers, media_type='audio/mpeg')
-
-# =====================================================
-# TODO: pagalvoti apie chat istorijos saugojima
-# del tikslesniu atsakymu ir pasikartojimu isvengimo
-# galbut storinti susirasinejima text faile ir kaskart
-# siunciant zinute appendinti ja prie bendro listo, o 
-# atvaizduojant rinktis [-1] jo elementa
-# =====================================================
-@chatbot_router.post("/conversation-txt")
-async def conversation_txt(audio: Optional[UploadFile] = File(None), message: Optional[str] = Form(None), username: str = Form(...)):
+@chatbot_router.post("/conversation")
+async def conversation(audio: Optional[UploadFile] = File(None), message: Optional[str] = Form(None), username: str = Form(...)):
     if not (audio or message):
         raise HTTPException(status_code=400, detail='Either audio file or message is required!')
     llm_input = message
@@ -54,112 +26,25 @@ async def conversation_txt(audio: Optional[UploadFile] = File(None), message: Op
     print(f'Calling LLM with: {llm_input}')
     llm_response = await get_llm_response(msg=llm_input, username=username)
     print(f'LLM response: {llm_response}')
-    # speech_response = await text_to_speech(text=llm_response)
-    # print(f'Converted LLM response to speech!')
-    headers = {'Content-Disposition': 'attachment; filename="response.txt"'}
-    return Response(llm_response, headers=headers, media_type='text/plain')
+    speech_response = await text_to_speech(text=llm_response, username=username)
+    print(f'Converted LLM response to speech!')
 
-# =====================================================
-# TODO: reikalingas papildomas metodas features 
-# istraukimui is mp4 video failo
-# =====================================================
-@chatbot_router.post("/features-txt")
-async def features(audio: Optional[UploadFile] = File(None), message: Optional[str] = Form(None), username: str = Form(...)):
-    if not (audio or message):
-        raise HTTPException(status_code=400, detail='Either audio file or message is required!')
-    llm_input = message
-    if audio:
-        # If audio is provided, transcribe it to text
-        print('Transcribing audio...')
-        llm_input = await speech_to_text(audio=audio)
-    print(f'Calling LLM with: {llm_input}')
-    llm_response = await get_feature_llm_response(msg=llm_input, username=username)
-    print(f'LLM response: {llm_response}')
-    # speech_response = await text_to_speech(text=llm_response)
-    # print(f'Converted LLM response to speech!')
-    headers = {'Content-Disposition': 'attachment; filename="response.txt"'}
-    return Response(llm_response, headers=headers, media_type='text/plain')
-
-@chatbot_router.post("/conversation-voice")
-async def conversation(message: str = Form(None)):
-    print(f'Converting message to speech!')
-    speech_response = await text_to_speech(text=message)
-    print(f'Message is converted to speech!')
-    headers = {'Content-Disposition': 'attachment; filename="speech.wav"'}
-    return Response(speech_response, headers=headers, media_type='audio/mpeg')
-
-async def text_to_speech(text: str):
-    audio_path = './static/audio_for_voice/voice.mp3'
-    if not os.path.exists(audio_path):
-        raise HTTPException(status_code=400, detail=f'No audio file found for text-to-speech conversion! Excepted: {audio_path}')
-    async with aiofiles.open(audio_path, 'rb') as audio_file:
-        audio_content = await audio_file.read()
-    form_data = {
-        "text": text
-    }
-    files = {
-        "audio": ("voice.mp3", audio_content, "audio/mpeg"),
-    }
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(TEXT_TO_SPEECH_SERVICE_URL, files=files, data=form_data, timeout=httpx.Timeout(180))
-            response.raise_for_status()
-            return response.content
-
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=e.response.status_code, detail=str(e))
-        except httpx.TimeoutException as e:
-            raise HTTPException(status_code=504,
-                                detail=f'The request timed out while waiting for a response from text-to-speech service: {str(e)}')
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=500, detail=f'Failed to connect to text-to-speech service: {str(e)}')
+    # Save in audio_responses folder for later download access
+    audio_response_title = f'{username}_{uuid.uuid4()}.wav'
+    audio_path = os.path.join(AUDIO_RESPONSES_DIR, audio_response_title)
+    with open(audio_path, 'wb') as audio_file:
+        audio_file.write(speech_response)
+    return {'llm_response': llm_response, 'audio_response_file': audio_response_title}
 
 
-async def get_llm_response(msg: str, username: str) -> str:
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(SEND_MESSAGE_SERVICE_URL,
-                                        params={'username': username, 'msg': msg},
-                                        timeout=httpx.Timeout(180))
-            response.raise_for_status()
-            return response.content
+@chatbot_router.post("/extract-features-for-persona-from-audio")
+async def extract_features_from_audio(audio: UploadFile = File(...), username: str = Form(...)):
+    text = await speech_to_text(audio=audio)
+    response = await extract_features_for_persona(text=text, username=username)
+    return {'llm_response': response}
 
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=e.response.status_code, detail=str(e))
-        except httpx.TimeoutException as e:
-            raise HTTPException(status_code=504,
-                                detail=f'The request timed out while waiting for a response from chatbot service: {str(e)}')
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=500, detail=f'Failed to connect to the chatbot service: {str(e)}')
 
-async def get_feature_llm_response(msg: str, username: str) -> str:
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(EXTRACT_FEATURES_SERVICE_URL,
-                                        params={'username': username, 'msg': msg},
-                                        timeout=httpx.Timeout(180))
-            response.raise_for_status()
-            return response.content
-
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=e.response.status_code, detail=str(e))
-        except httpx.TimeoutException as e:
-            raise HTTPException(status_code=504,
-                                detail=f'The request timed out while waiting for a response from chatbot service: {str(e)}')
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=500, detail=f'Failed to connect to the chatbot service: {str(e)}')
-
-async def speech_to_text(audio: UploadFile) -> str:
-    form_data = {"file": (audio.filename, await audio.read(), audio.content_type)}
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(SPEECH_TO_TEXT_SERVICE_URL, files=form_data, timeout=httpx.Timeout(180))
-            response.raise_for_status()
-            return response.json()['transcription']
-
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=e.response.status_code, detail=str(e))
-        except httpx.TimeoutException as e:
-            raise HTTPException(status_code=504, detail=f'The request timed out while waiting for a response from speech-to-text service: {str(e)}')
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=500, detail=f'Failed to connect to the speech-to-text service: {str(e)}')
+@chatbot_router.post("/extract-features-for-persona-from-text")
+async def extract_features_from_text(text: str, username: str):
+    response = await extract_features_for_persona(text=text, username=username)
+    return {'llm_response': response}
