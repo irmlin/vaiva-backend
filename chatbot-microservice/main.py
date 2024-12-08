@@ -15,6 +15,12 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 features_service = FeaturesService()
 conversation_service = ConversationService()
 
+
+@app.get("/get-users")
+async def get_features():
+    feature_files = [f for f in os.listdir(os.path.join('src', 'data', 'features')) if f.endswith('.txt')]
+    return [os.path.splitext(f)[0] for f in feature_files]
+
 @app.get("/get-features")
 async def get_features(username: str):
     return await features_service.get_features(username=username)

@@ -1,15 +1,15 @@
 services:
 
-  main-api:
-    image: main-api
-    container_name: main-api
-    volumes:
-      - ./main-api/static:/app/static
-    ports:
-      - 8001:8001
-    command: python main.py
-    networks:
-      - app-network
+#  main-api:
+#    image: main-api
+#    container_name: main-api
+#    volumes:
+#      - ./main-api/static:/app/static
+#    ports:
+#      - 8001:8001
+#    command: python main.py
+#    networks:
+#      - app-network
 
   video-avatar-microservice:
     image: video-avatar-microservice
