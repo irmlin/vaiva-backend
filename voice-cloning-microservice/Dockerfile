@@ -35,6 +35,7 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu113
 RUN python -m unidic download
+RUN python -m nltk.downloader averaged_perceptron_tagger_eng
 
 COPY main.py ./
 COPY src/ src/
