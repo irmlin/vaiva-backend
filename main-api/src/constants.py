@@ -1,7 +1,7 @@
 import os
 
-STATIC_DIR = 'static/'
-DOCUMENTS_DIR = os.path.join(STATIC_DIR, 'documents')
+STATIC_DIR = 'static'
+AUDIO_RESPONSES_DIR = os.path.join(STATIC_DIR, 'audio_responses')
 AUDIO_FOR_AVATAR_DIR = os.path.join(STATIC_DIR, 'audio_for_avatar')
 AUDIO_FOR_VOICE_DIR = os.path.join(STATIC_DIR, 'audio_for_voice')
 VIDEO_DIR = os.path.join(STATIC_DIR, 'video')

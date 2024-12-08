@@ -13,7 +13,7 @@ import uvicorn
 app = FastAPI()
 
 # Initialize Whisper model
-model = whisper.load_model("base")
+# model = whisper.load_model("base")
 
 
 @app.get("/")
@@ -108,6 +108,7 @@ def transcribe_wav(wav_data: BytesIO) -> str:
         audio = audio / np.max(np.abs(audio))
 
         # Transcribe the audio
+        model = whisper.load_model("base")
         result = model.transcribe(audio)
 
         if 'text' in result and result['text'].strip():

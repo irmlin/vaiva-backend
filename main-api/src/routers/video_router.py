@@ -22,12 +22,12 @@ async def generate_video(audio: UploadFile = File(...), image: UploadFile = File
             response.raise_for_status()
 
             # Save in videos folder for later download access
-            video_path = os.path.join(VIDEO_DIR, f'{username}.mp4')
+            video_name = f'{username}.mp4'
+            video_path = os.path.join(VIDEO_DIR, video_name)
             with open(video_path, 'wb') as video_file:
                 video_file.write(response.content)
 
-            headers = {'Content-Disposition': 'attachment; filename="generated_video.mp4"'}
-            return Response(response.content, headers=headers, media_type='video/mp4')
+            return {'video_name': video_name}
 
         except httpx.HTTPStatusError as e:
             raise HTTPException(status_code=e.response.status_code, detail=str(e))

@@ -5,13 +5,19 @@ import httpx
 from fastapi import HTTPException, UploadFile
 
 from ..constants import SEND_MESSAGE_SERVICE_URL, SPEECH_TO_TEXT_SERVICE_URL, TEXT_TO_SPEECH_SERVICE_URL, \
-    EXTRACT_FEATURES_SERVICE_URL
+    EXTRACT_FEATURES_SERVICE_URL, AUDIO_FOR_VOICE_DIR
 
 
-async def text_to_speech(text: str):
-    audio_path = './static/audio_for_voice/voice.mp3'
-    if not os.path.exists(audio_path):
-        raise HTTPException(status_code=400, detail=f'No audio file found for text-to-speech conversion! Excepted: {audio_path}')
+async def text_to_speech(text: str, username: str):
+    audio_for_username_present = False
+    for ext in ['.mp3', '.wav']:
+        audio_path = os.path.join(AUDIO_FOR_VOICE_DIR, f'{username}{ext}')
+        if os.path.exists(audio_path):
+            audio_for_username_present = True
+            break
+
+    if not audio_for_username_present:
+        raise HTTPException(status_code=400, detail=f'No audio file found for text-to-speech conversion for user {username}! Expected: {username}.wav or {username}.mp3')
     async with aiofiles.open(audio_path, 'rb') as audio_file:
         audio_content = await audio_file.read()
     form_data = {

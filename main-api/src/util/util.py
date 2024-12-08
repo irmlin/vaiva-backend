@@ -1,15 +1,18 @@
 import os
-from typing import List
+from typing import List, Optional
 
 import aiofiles
 
 from fastapi import HTTPException, UploadFile
 
 
-async def save_input_file_to_storage(file: UploadFile, save_dir: str) -> str:
-    file_path = os.path.join(save_dir, file.filename)
+async def save_input_file_to_storage(file: UploadFile, save_dir: str, name: Optional[str] = None) -> str:
+    if name is not None:
+        file_path = os.path.join(save_dir, name)
+    else:
+        file_path = os.path.join(save_dir, file.filename)
     if os.path.exists(file_path):
-        raise HTTPException(status_code=400, detail=f"File {file.filename} already exists! Rename the file and try again.")
+        raise HTTPException(status_code=400, detail=f"File {os.path.basename(file_path)} already exists! Rename the file and try again.")
     async with aiofiles.open(file_path, 'wb') as out_file:
         content = await file.read()
         await out_file.write(content)
