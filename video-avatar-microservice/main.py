@@ -19,4 +19,4 @@ async def generate_video(audio: UploadFile = File(...), image: UploadFile = File
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host='0.0.0.0', port=8002, log_level="info", reload=False)
+    uvicorn.run("main:app", host='0.0.0.0', port=8003, log_level="info", reload=False)

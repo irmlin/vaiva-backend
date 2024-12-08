@@ -11,4 +11,6 @@ ALLOWED_AUDIO_EXTENSIONS = ['.wav', '.mp3']
 ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.png', '.jpeg']
 ALLOWED_VIDEO_EXTENSIONS = ['.mp4']
 AVATAR_SERVICE_URL = 'http://video-avatar-microservice:8002/generate-video'
-SEND_MESSAGE_SERVICE_URL = 'http://chatbot-microservice:8006/send-message'
+SEND_MESSAGE_SERVICE_URL = 'http://localhost:8006/send-message'
+SPEECH_TO_TEXT_SERVICE_URL = 'http://localhost:8007/transcribe'
+TEXT_TO_SPEECH_SERVICE_URL = 'http://localhost:8002/clone-voice'

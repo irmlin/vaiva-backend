@@ -16,7 +16,6 @@ print(f"Float16 supported: {torch.cuda.get_device_capability(0) >= (7, 0)}")
 nltk.download('averaged_perceptron_tagger_eng')
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 voice_service = VoiceService()
 
