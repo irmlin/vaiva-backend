@@ -1,6 +1,6 @@
-python -m unidic download
+For a local run, `python -m unidic download`
 
-# How to run
+# How to run (docker)
 docker build -t voice-cloning .
 docker run -it --gpus all -p 8002:8002 voice-cloning
 
