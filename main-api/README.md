@@ -25,7 +25,7 @@
 5. 8003 : image+audio to video (avatar video)
 
 ### Order of endpoints to be called 
-1. Client call to http://localhost:8001/send-message with user message as input
+1. Client call to http://localhost:8001/conversation with user message as input
    * If user message was text, call http://localhost:8007/transcribe to get speech-to-text response 
 2. Use received text to call http://localhost:8006/send-message and return LLM text response
 3. Use LLM text response to call http://localhost:8002/clone-voice and return text-to-speech result
