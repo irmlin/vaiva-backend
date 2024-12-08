@@ -27,7 +27,7 @@ services:
       - ./video-avatar-microservice/src/external/sadtalker/results:/app/src/external/sadtalker/results
       - ./video-avatar-microservice/static:/app/static
     ports:
-      - 8002:8002
+      - 8003:8003
     command: python main.py
     networks:
       - app-network

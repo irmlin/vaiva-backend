@@ -7,6 +7,7 @@ import whisper
 from pydub import AudioSegment
 from io import BytesIO
 import ffmpeg
+import uvicorn
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -23,7 +24,7 @@ def root():
     return {"message": "Working:)"}
 
 
-@app.post("/record/")
+@app.post("/record")
 def record_audio(filename: str = "audio.wav", duration: int = 10, samplerate: int = 44100):
     """
     Record audio and save it as a WAV file.
@@ -118,7 +119,7 @@ def transcribe_wav(wav_data: BytesIO) -> str:
 
 
 
-@app.post("/transcribe/")
+@app.post("/transcribe")
 async def transcribe_audio(file: UploadFile = File(...)):
     """
     Accept an uploaded audio/video file, convert to WAV if necessary, and transcribe it using Whisper.
@@ -133,3 +134,8 @@ async def transcribe_audio(file: UploadFile = File(...)):
         return {"filename": file.filename, "transcription": transcription}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
+
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host='0.0.0.0', port=8007, log_level="info", reload=False)

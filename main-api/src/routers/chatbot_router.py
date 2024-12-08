@@ -18,15 +18,15 @@ chatbot_router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 async def test():
      return 'test'
 
-@chatbot_router.get("/conversation")
-async def conversation(audio: Optional[UploadFile] = File(None), message: Optional[str] = Form(None)):
+@chatbot_router.post("/conversation")
+async def conversation(audio: Optional[UploadFile] = File(None), message: Optional[str] = Form(None), username: str = Form(...)):
     if not (audio or message):
         raise HTTPException(status_code=400, detail='Either audio file or message is required!')
     llm_input = message
     if audio:
         # If audio is provided, transcribe it to text
         llm_input = await speech_to_text(audio=audio)
-    llm_response = await get_llm_response(msg=llm_input)
+    llm_response = await get_llm_response(msg=llm_input, username=username)
     # speech = text_to_speech(text=llm_response)
     # return
     return llm_response
@@ -58,11 +58,11 @@ async def text_to_speech(text: str) -> str:
             raise HTTPException(status_code=500, detail=f'Failed to connect to text-to-speech service: {str(e)}')
 
 
-async def get_llm_response(msg: str) -> str:
+async def get_llm_response(msg: str, username: str) -> str:
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(SEND_MESSAGE_SERVICE_URL,
-                                        params={'username': 'alex_morgan', 'msg': msg},
+                                        params={'username': username, 'msg': msg},
                                         timeout=httpx.Timeout(180))
             response.raise_for_status()
             return response.content
@@ -82,7 +82,7 @@ async def speech_to_text(audio: UploadFile) -> str:
         try:
             response = await client.post(SPEECH_TO_TEXT_SERVICE_URL, files=form_data, timeout=httpx.Timeout(180))
             response.raise_for_status()
-            return response.content['transcription']
+            return response.json()['transcription']
 
         except httpx.HTTPStatusError as e:
             raise HTTPException(status_code=e.response.status_code, detail=str(e))

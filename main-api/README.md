@@ -18,11 +18,11 @@
 
 
 ### Port:microservice map
-1. 8001 : main-api
-2. 8006 : chatbot-microservice
-3. 8002 : voice-cloning (text-to-speech)
-4. 8007 : speech-to-text
-5. 8003 : image+audio to video (avatar video)
+1. `8001` : main-api
+2. `8006` : chatbot-microservice
+3. `8002` : voice-cloning (text-to-speech)
+4. `8007` : speech-to-text
+5. `8003` : image+audio to video (avatar video)
 
 ### Order of endpoints to be called 
 1. Client call to http://localhost:8001/conversation with user message as input
