@@ -25,7 +25,6 @@ root_router = APIRouter(prefix="/api")
 root_router.include_router(video_router)
 root_router.include_router(chatbot_router)
 root_router.include_router(files_router)
-
 app.include_router(root_router)
 
 
