@@ -4,7 +4,7 @@ import json
 
 class FeaturesService:
     def __init__(self):
-        self.__extr_prompt = f"{os.path.join('static')}/feature_extraction_prompt.json"
+        self.__extr_prompt = f"{os.path.join('src', 'data')}/feature_extraction_prompt.json"
         self.__data_dir = os.path.join('src', 'data', 'features')
 
     # Returns specific users feature map (json: status;content.)
@@ -64,8 +64,8 @@ class FeaturesService:
         # response_data = json.dumps(response_data)
         response_data = json.loads(response_data)
 
-        print(f'++++++++++++++++++++++++++++++\nFEATURES:\n{response_data['features']}')
-        print(f'++++++++++++++++++++++++++++++\nRESPONSE:\n{response_data['response']}')
+        # print(f'++++++++++++++++++++++++++++++\nFEATURES:\n{response_data['features']}')
+        # print(f'++++++++++++++++++++++++++++++\nRESPONSE:\n{response_data['response']}')
         
         features = json.dumps(response_data['features'])
         await self.write_features(username=username, data=features)

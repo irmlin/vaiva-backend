@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse
 
 class ConversationService:
     def __init__(self):
-        self.__conv_prompt = f"{os.path.join('static')}/conversation_prompt.txt"
+        self.__conv_prompt = f"{os.path.join('src', 'data')}/conversation_prompt.txt"
         self.__data_dir = os.path.join('src', 'data', 'features')
 
     # Returns specific users feature map (json: status;content.)
