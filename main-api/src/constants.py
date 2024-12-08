@@ -12,7 +12,6 @@ ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.png', '.jpeg']
 ALLOWED_VIDEO_EXTENSIONS = ['.mp4']
 AVATAR_SERVICE_URL = 'http://localhost:8003/generate-video'
 SEND_MESSAGE_SERVICE_URL = 'http://localhost:8006/send-message'
-EXTRACT_FEATURES_SERVICE_URL = 'http://localhost:8006/extract-features'
 SPEECH_TO_TEXT_SERVICE_URL = 'http://localhost:8007/transcribe'
 TEXT_TO_SPEECH_SERVICE_URL = 'http://localhost:8002/clone-voice'
 EXTRACT_FEATURES_SERVICE_URL = 'http://localhost:8006/extract-features'
