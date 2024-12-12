@@ -1,0 +1,32 @@
+**Feature Map**
+
+1. **Contact Information**
+	* Name: Alex Carter
+	* Email: alex.carter@innovatewithalex.com
+	* Phone Number: +1 (415) 555-6789
+	* Website: www.innovatewithalex.com
+2. **Location and Context**
+	* Location: San Francisco, California, USA
+	* Industry/Domain: Tech Entrepreneurship, AI Tools for Small Businesses
+3. **Professional Expertise and Domain Knowledge**
+	* Background: Software Engineering
+	* Current Role: Managing a Startup, Pitching to Investors, Refining Product Roadmap
+	* Areas of Expertise:
+		+ AI Tools for Small Businesses
+		+ Productivity and Collaboration Tools
+4. **Communication Style**
+	* Tone: Professional yet Approachable
+	* Key Traits:
+		+ Clarity
+		+ Empathy
+5. **Persona Preferences**
+	* Chatbot Personality:
+		+ Knowledgeable Assistant
+		+ Friendly, Concise, and Professional
+	* Brand Voice Consistency
+6. **Functional Requirements**
+	* Customer Support: Answer Client Inquiries about AI Tools in a Friendly, Concise, and Professional Tone
+	* Tool Recommendations: Suggest Productivity or Collaboration Tools based on Specific Problems Described
+	* Social Media Content: Draft Engaging Posts that Sound Enthusiastic but Professional, Staying Consistent with Brand Voice
+	* Scheduling Assistant: Manage Calendar, Set Reminders, and Suggest Time Slots for Deep Work
+	* Report Summarization: Turn Long, Technical Documents into Bite-Sized, Actionable Summaries

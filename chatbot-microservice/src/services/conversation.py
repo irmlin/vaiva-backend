@@ -1,5 +1,7 @@
 import ollama
 import os
+import time
+import random
 
 from fastapi import HTTPException, UploadFile
 from fastapi.responses import FileResponse
@@ -8,6 +10,11 @@ class ConversationService:
     def __init__(self):
         self.__conv_prompt = f"{os.path.join('src', 'data')}/conversation_prompt.txt"
         self.__data_dir = os.path.join('src', 'data', 'features')
+        self.__conv_dir = os.path.join('src', 'data', 'conversations')
+        self.id = str(int(time.time()) + random.randint(1, 100))
+
+    async def generate_id(self):
+        self.id = str(int(time.time()) + random.randint(1, 100))
 
     # Returns specific users feature map (json: status;content.)
     async def get_features(self, username):
@@ -23,6 +30,24 @@ class ConversationService:
 
         return features
     
+    async def save_conversation(self, messages, id):
+        data_file = f'{os.path.join(self.__conv_dir, id)}.txt'
+        with open(data_file, 'w') as file:
+            file.write(messages)
+
+        return 'Done'
+    
+    async def get_conversation(self, id):
+        data_file = f'{os.path.join(self.__conv_dir, id)}.txt'
+        try:
+            with open(data_file, 'r') as file:
+                messages = eval(file.read())
+                return messages
+        
+        except FileNotFoundError:
+            return -1
+        
+    
     async def call_openai_api(self, messages):
         print('Waiting for ollama response..')
         response = ollama.chat(
@@ -32,8 +57,11 @@ class ConversationService:
         )
         return response
 
-    async def send_message(self, username, message, messages):
-        if messages:
+    async def send_message(self, username, message, id):
+
+        messages = await self.get_conversation(id)
+
+        if messages and messages != -1:
             print('--------------------------> calling messages')
             messages.append({'role': 'user', 'content': message})
             response = await self.call_openai_api(messages=messages)
@@ -57,7 +85,9 @@ class ConversationService:
         response_message = response['message']['content']
         messages.append({'role':'assistant', 'content': response_message})
 
-        print(messages)
+        print(response_message)
+
+        await self.save_conversation(messages=str(messages), id=self.id)
 
         return(response_message)
 

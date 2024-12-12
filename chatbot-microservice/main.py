@@ -7,6 +7,8 @@ from fastapi.staticfiles import StaticFiles
 from src.services.features import FeaturesService
 from src.services.conversation import ConversationService
 
+from typing import Optional
+
 from src.constants import STATIC_DIR
 
 app = FastAPI()
@@ -35,7 +37,11 @@ async def extract_features(username: str, msg: str):
 
 @app.get("/send-message")
 async def send_message(username: str, msg: str):
-    return await conversation_service.send_message(username=username, message=msg, messages=None)
+    return await conversation_service.send_message(username=username, message=msg, id=conversation_service.id)
+
+@app.get("/new-id")
+async def new_id():
+    return await conversation_service.generate_id()
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host='0.0.0.0', port=8006, log_level="info", reload=False)

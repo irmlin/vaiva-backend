@@ -34,7 +34,7 @@ class FeaturesService:
     # Generates feature map and a response using Ollama. Endpoint returns response
     # string to display to the user in frontend
     async def extreact_features(self, username, msg):
-        existing_features = await self.get_features(username=username)
+        # existing_features = await self.get_features(username=username)
         messages = []
 
         with open(self.__extr_prompt, 'r') as file:
@@ -42,17 +42,19 @@ class FeaturesService:
 
         messages.append(extr_prompt)
 
-        if existing_features['status'] == 'ok':
-            messages.append({'role': 'user', 'content': existing_features['content']})
+        # if existing_features['status'] == 'ok':
+        #     messages.append({'role': 'user', 'content': existing_features['content']})
 
-        msg_expand = [{'role': 'assistant', 'content': 'What else can you tell me about yourself?'},
-                      {'role': 'user', 'content': msg}]
+        # msg_expand = [{'role': 'assistant', 'content': 'What else can you tell me about yourself?'},
+        #               {'role': 'user', 'content': msg}]
+
+        msg_expand = [{'role': 'user', 'content': msg}]
         messages.extend(msg_expand)
 
         print('Waiting for ollama response..')
         response = ollama.chat(
             model='llama3.2',
-            format='json',
+            # format='json',
             messages=messages
         )
 
@@ -61,13 +63,12 @@ class FeaturesService:
 
         messages.append({'role': 'assistant', 'content': response_data})
 
-        # response_data = json.dumps(response_data)
-        response_data = json.loads(response_data)
+        # response_data = json.loads(response_data)
 
         # print(f'++++++++++++++++++++++++++++++\nFEATURES:\n{response_data['features']}')
         # print(f'++++++++++++++++++++++++++++++\nRESPONSE:\n{response_data['response']}')
         
-        features = json.dumps(response_data['features'])
-        await self.write_features(username=username, data=features)
+        # features = json.dumps(response_data['features'])
+        await self.write_features(username=username, data=response_data)
 
-        return response_data['response']
+        return response_data
